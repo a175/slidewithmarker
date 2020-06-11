@@ -1,0 +1,14 @@
+div.vruler {
+    opacity: 0.1;
+    background-color: red;
+}
+
+div.hruler {
+    opacity: 0.1;
+    background-color: red;
+
+}
+
+div.pointer {
+    box-shadow: 0px 0px 2px 1px red, 0px 0px 2px 1px red inset
+}

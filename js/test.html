@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="./slidewithmarker.css" />
+
+<script type="text/javascript" src="./slidewithmarker.js"> </script>
+<script type="text/javascript">
+var swm;
+function make_froms(){
+    var mainbox,ctl;
+    
+    mainbox = document.getElementById("mainbox");    
+    swm = new NU.slidewithmarker.publ.clas.SlideWithMarker();
+    mainbox.appendChild(swm.getBaseElement());
+
+    ctl = document.getElementById("modeStandalone");
+    ctl.checked = true;
+    swm.setMode(0);
+
+    ctl = document.getElementById("pointermodeT");
+    ctl.checked = true;
+    swm.setPointerMode(1);
+}
+</script>
+
+
+<title>slidewithmarker</title>
+</head>
+
+<body onLoad="make_froms();">
+
+  <form>
+    <p>
+    Mode:
+    <input type="radio" name="mode" id="modeStandalone" onClick="swm.setMode(0);"/>
+    <label for="modeStandalone">Reader</label>
+    <input type="radio" name="mode" id="modeSlave" onClick="swm.setMode(1);"/>
+    <label for="modeSlave">Audience</label>
+    <input type="radio" name="mode" id="modeMaster" onClick="swm.setMode(3);"/>
+    <label for="modeMaster">Presenter</label>
+    </p>
+
+    <p>Page controls for Reader and Presentor Mode:
+    <input type="button"  onClick="swm.movePage(-2);" value="<<" />
+    <input type="button"  onClick="swm.movePage(-1);" value="<" />
+    <input type="button"  onClick="swm.movePage(1);" value=">" />
+    <input type="button"  onClick="swm.movePage(2);"  value=">>" />
+    (Double click to go to next page in Presenter Mode.)
+    </p>
+
+    
+    <p>
+     Poiter options for Presenter Mode:
+    <input type="radio" name="pointermode" id="pointermodeT" onClick="swm.setPointerMode(1);"/>
+    <label for="pointermodeT">Toggle by click</label>
+    <input type="radio" name="pointermode" id="pointermodeD" onClick="swm.setPointerMode(2);"/>
+    <label for="pointermodeD">On if button is down</label>
+    <input type="radio" name="pointermode" id="pointermodeO" onClick="swm.setPointerMode(-1);"/>
+    <label for="pointermodeO">On</label>
+    <input type="radio" name="pointermode" id="pointermodeX" onClick="swm.setPointerMode(-2);"/>
+    <label for="pointermodeX">Off</label>
+    </p>
+  </form>
+  <div  id="mainbox"></div>
+  <p>EOF</p>
+  <hr />
+</body>
+</html>
+

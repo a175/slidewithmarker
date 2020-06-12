@@ -1,3 +1,4 @@
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,6 +21,9 @@ function make_froms(){
     ctl = document.getElementById("pointermodeT");
     ctl.checked = true;
     swm.setPointerMode(1);
+
+    swm.setChatSeverURL(NU.slidewithmarker.publ.cons.TESTSERVERURL);
+    swm.loadSlideFile(NU.slidewithmarker.publ.cons.TESTSLIDEURLBASE);
 }
 </script>
 

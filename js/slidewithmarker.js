@@ -9,9 +9,10 @@ NU.slidewithmarker={
 NU.slidewithmarker.publ.cons.SVGNS="http://www.w3.org/2000/svg";
 NU.slidewithmarker.publ.cons.XLINKNS="http://www.w3.org/1999/xlink";
 
+NU.slidewithmarker.publ.cons.TESTSERVERURL = "ws://127.0.0.1:12345/";
+NU.slidewithmarker.publ.cons.TESTSLIDEURLBASE = "./test-data/image-";
 
-NU.slidewithmarker.publ.func.createAndPut = function(pare){
-};
+NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 
 
 /** */
@@ -42,21 +43,22 @@ NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
     elm.style.zIndex = "5";
     base.appendChild(elm);
 
-    
-    this.is_ready_to_send = false;
-    this.chatserverurl = "wss://127.0.0.1:12345/";
-    this.chatserverurl = "ws://127.0.0.1:12345/";
 };
-
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getBaseElement = function(){
     return this.baseElement;
+};
+
+NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.loadSlideFile = function(url){
+    this.slideLayer.loadSlideFile(url);
+    this.fitMarkerLayerToSlideLayer();
 };
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setMode = function(mode){
     if(mode==3){
 	this.actionLayer.setActive(true);
 	this.markerLayer.setActive(true);
+	this.fitMarkerLayerToSlideLayer();
 	this.is_slave_mode=true;
 	this.is_master_mode=true;
 	this.openConnection();
@@ -64,6 +66,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setMode = function(mode){
     if(mode==1){
 	this.actionLayer.setActive(false);
 	this.markerLayer.setActive(true);
+	this.fitMarkerLayerToSlideLayer();
 	this.is_slave_mode=true;
 	this.is_master_mode=false;
 	this.openConnection();
@@ -101,6 +104,14 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.movePage = function(mode)
 	    this.sendPresentationData();
 	}
     }
+    this.fitMarkerLayerToSlideLayer();
+};
+
+NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.fitMarkerLayerToSlideLayer = function(){
+    var size;
+    size=this.slideLayer.getPageSize();
+    this.markerLayer.setSize(size);
+    this.actionLayer.setSize(size);
 };
 
 
@@ -199,6 +210,14 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = functio
     }
 };
 
+NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = function(url){
+    if(this.websocket){
+	this.websocket.close();
+    }
+    this.websocket = null;
+    this.is_ready_to_send = false;
+    this.chatserverurl = url;
+};
 
 
 NU.slidewithmarker.priv.clas.SlideLayer = function(){
@@ -211,9 +230,6 @@ NU.slidewithmarker.priv.clas.SlideLayer = function(){
     base.style.width = "100%";
     base.style.height = "100%";
     base.className = "slidelayer";
-
-    this.loadSlideFile();
-    this.setPage(0);
 };
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.getBaseElement = function(){
@@ -227,15 +243,16 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.loadSlideFile = function(url){
 	this.slideElement = document.createElement("img");
 	this.baseElement.appendChild(this.slideElement);
     }
-    this.slideElement.src = url;
+    this.slidefileurlbase = url;
     this.totalPages = 4;
+    this.setPage(0);
 };
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.setPage = function(page){
     var p;
     p = ((page + this.totalPages) % this.totalPages );
     this.current_page = p;
-    this.loadSlideFile("./test-data/image-"+(p+1)+".png");
+    this.slideElement.src=(this.slidefileurlbase+(p+1)+".png");
 };
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.nextPage = function(page_rel){
@@ -312,6 +329,13 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setActive = function(isactive
 	this.baseElement.style.visibility = "visible";
     }else{
 	this.baseElement.style.visibility = "hidden";
+    }
+};
+
+NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setSize = function(size){
+    if(size){
+	this.baseElement.style.width = size[0];
+	this.baseElement.style.height = size[1];
     }
 };
 
@@ -430,6 +454,14 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.setActive = function(isactive
 	this.baseElement.style.visibility = "hidden";
     }
 };
+
+NU.slidewithmarker.priv.clas.ActionLayer.prototype.setSize = function(size){
+    if(size){
+	this.baseElement.style.width = size[0];
+	this.baseElement.style.height = size[1];
+    }
+};
+
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.setToggleMode = function(togglemode){
     this.toggle_mode = togglemode;

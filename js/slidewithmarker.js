@@ -70,7 +70,6 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getBaseElement = function
  *  Set and load the url of a slide file.
  *  @this {SlideWithMarker}
  *  @param {String} url The base URL of the slide file.
- *  @todo Fix this function for PDF version.
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.loadSlideFile = function(url){
@@ -338,6 +337,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = functio
  *  @constructor
  *  @this {SlideLayer}
  *  @private
+ *  @todo Fix for the PDF version.
  */
 
 NU.slidewithmarker.priv.clas.SlideLayer = function(){

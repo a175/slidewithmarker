@@ -17,7 +17,7 @@ NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 
 
 /** 
- *  Constructor of SlideWithMarker
+ *  Constructor of SlideWithMarker.
  *  @constructor
  *  @this {SlideWithMarker}
  */
@@ -26,7 +26,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
     var elm,base;
     base = document.createElement("div");
 
-    /** @type {Element} the html element of the main container */
+    /** @type {Element} The html element of the main container. */
     this.baseElement = base;
     base.style.position = "relative";
     base.style.width = "100%";
@@ -69,7 +69,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getBaseElement = function
 /** 
  *  Set and load the url of a slide file.
  *  @this {SlideWithMarker}
- *  @param {String} url the base URL of the slide file
+ *  @param {String} url The base URL of the slide file.
  *  @todo Fix this function for PDF version.
  */
 
@@ -164,7 +164,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.fitMarkerLayerToSlideLaye
 
 /** 
  *  @this {SlideWithMarker}
- *  @return {Object} the data of markers and slides to send to chat server.
+ *  @return {Object} The data of markers and slides to send to chat server.
  *  @private
  */
 
@@ -209,7 +209,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.applyPresentationData = f
  *  Get and send the data of markers and slides to chat server. 
  *  @this {SlideWithMarker}
  *  @private
- *  @todo fix the case when the connection is not ready. 
+ *  @todo Fix the case when the connection is not ready. 
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = function(){
@@ -228,9 +228,9 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = fu
 /** 
  *  @this {SlideWithMarker}
  *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action Listener for onclose of websocket.
+ *  @return {Function} Action listener for onclose of websocket.
  *  @private
- *  @todo try to connect again?
+ *  @todo Try to connect again?
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnClose = function(slidewithmarker){
@@ -243,7 +243,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnClose = functi
 /** 
  *  @this {SlideWithMarker}
  *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action Listener for onmessage of websocket.
+ *  @return {Function} Action listener for onmessage of websocket.
  *  @private
  */
 
@@ -258,7 +258,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnMessage = func
 /** 
  *  @this {SlideWithMarker}
  *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action Listener for onopen of websocket.
+ *  @return {Function} Action listener for onopen of websocket.
  *  @private
  */
 
@@ -274,9 +274,9 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnConnectionOpen
 /** 
  *  @this {SlideWithMarker}
  *  @param {SlideWithMarker} slidewithmarker
- *  @return {function} Action Listener for onerror of websocket.
+ *  @return {function} Action listener for onerror of websocket.
  *  @private
- *  @todo try to connect again?
+ *  @todo Try to connect again?
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnError = function(slidewithmarker){
@@ -320,7 +320,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = functio
 /**
  *  Set the URL of chat server.
  *  @this {SlideWithMarker}
- *  @param {String} url  the url of chat server.
+ *  @param {String} url The url of chat server.
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = function(url){
@@ -336,7 +336,7 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = functio
 /**
  *  Layer of slide.
  *  @constructor
- *  @this SlideLayer
+ *  @this {SlideLayer}
  *  @private
  */
 
@@ -344,7 +344,7 @@ NU.slidewithmarker.priv.clas.SlideLayer = function(){
     var base;
     base = document.createElement("div");
 
-    /** @type {Element} the main container of the html element*/
+    /** @type {Element} The main container of the html element.*/
     this.baseElement = base;
     base.style.position = "absolute";
     base.style.left = 0;
@@ -356,7 +356,7 @@ NU.slidewithmarker.priv.clas.SlideLayer = function(){
 
 /**
  *  @this {SlideLayer}
- *  @return {Element} the html elment of the main container.
+ *  @return {Element} The html elment of the main container.
  *  @private
  */
 
@@ -365,11 +365,11 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.getBaseElement = function(){
 };
 
 /**
- *  Set and load the url of slide file
+ *  Set and load the url of slide file.
  *  @this {SlideLayer}
- *  @param {String} the url of the slide file
+ *  @param {String} The url of the slide file.
  *  @private
- *  @todo fix for the PDF version
+ *  @todo Fix for the PDF version.
  */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.loadSlideFile = function(url){
@@ -385,11 +385,11 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.loadSlideFile = function(url){
 };
 
 /**
- *  Set and load the new page of slide file
+ *  Set and load the new page of slide file.
  *  @this {SlideLayer}
- *  @param {Number} page
+ *  @param {Number} page.
  *  @private
- *  @todo fix for the PDF version
+ *  @todo Fix for the PDF version.
  */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.setPage = function(page){
@@ -400,9 +400,9 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.setPage = function(page){
 };
 
 /**
- *  Set the page relatively
+ *  Set the page relatively.
  *  @this {SlideLayer}
- *  @param {Number} the number to add the current page
+ *  @param {Number} The number to add the current page.
  *  @private
  */
 
@@ -416,9 +416,9 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.nextPage = function(page_rel){
 
 /**
  *  @this {SlideLayer}
- *  @return {Array} the pair of width and height of current page of slide.
+ *  @return {Array} The pair of width and height of current page of slide.
  *  @private
- *  @todo fix for the PDF version
+ *  @todo Fix for the PDF version.
  */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.getPageSize = function(){
@@ -427,7 +427,7 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.getPageSize = function(){
 
 /**
  *  @this {SlideLayer}
- *  @return {Obeject} the data of slide to send the chat server.
+ *  @return {Obeject} The data of slide to send the chat server.
  *  @private
  */
 
@@ -441,7 +441,7 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.getSlidedata = function(){
 
 
 /**
- *  Layer of Makers
+ *  Layer of Makers.
  *  @constructor
  *  @this {MarkerLayer}
  *  @private
@@ -451,7 +451,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     var base,elm;
     base = document.createElement("div");
 
-    /** @type {Element} the main container of the html element*/
+    /** @type {Element} The main container of the html element.*/
     this.baseElement = base;
     base.style.position = "absolute";
     base.style.left = 0;
@@ -468,7 +468,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     elm.style.height = "5px";
     elm.className = "hruler";
     base.appendChild(elm);
-    /** @type {Element} horizonal ruler*/
+    /** @type {Element} Horizonal ruler.*/
     this.hruler = elm;
 
     elm = document.createElement("div");
@@ -479,7 +479,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     elm.style.height = "100%";
     elm.className = "vruler";
     base.appendChild(elm);
-    /** @type {Element} virtical ruler*/
+    /** @type {Element} Virtical ruler.*/
     this.vruler = elm;
 
     elm = document.createElement("div");
@@ -490,14 +490,14 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     elm.style.height = "7px";
     elm.className = "pointer";
     base.appendChild(elm);
-    /** @type {Element} pointer*/
+    /** @type {Element} Pointer.*/
     this.pointer = elm;
 
 };
 
 /**
  *  @this {MarkerLayer}
- *  @return {Element} the html elemnt of the main container.
+ *  @return {Element} The html elemnt of the main container.
  *  @private
  */
 
@@ -523,7 +523,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setActive = function(isactive
 /**
  *  Set size.
  *  @this {MarkerLayer}
- *  @param {Array} size  the pair of width and height.
+ *  @param {Array} size The pair of width and height.
  *  @private
  */
 
@@ -538,7 +538,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setSize = function(size){
 /**
  *  Set marker.
  *  @this {MarkerLayer}
- *  @param {Object} markerdata  the data recieved from the chat server.
+ *  @param {Object} markerdata The data recieved from the chat server.
  *  @param {Number} scale 
  *  @private
  */
@@ -561,14 +561,14 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarker = function(markerda
  *  Layer for action.
  *  @constractor 
  *  @this {ActionLayer}
- *  @param {SlideWithMarker} parentcontainer the parent element of this.
+ *  @param {SlideWithMarker} parentcontainer The parent element of this.
  *  @private
  */
 
 NU.slidewithmarker.priv.clas.ActionLayer = function(parentcontainer){
     var base,action;
     base  = document.createElement("div");
-    /** @type {Element} the main container of html element*/
+    /** @type {Element} The main container of html element.*/
     this.baseElement = base;
     base.style.position = "absolute";
     base.style.left = 0;
@@ -577,7 +577,7 @@ NU.slidewithmarker.priv.clas.ActionLayer = function(parentcontainer){
     base.style.height = "100%";    
     base.className = "actionlayer";
 
-    /** @type {String} the style of the pointer
+    /** @type {String} The style of the pointer.
       * @private 
       */
     this.pointer_style = "";
@@ -598,7 +598,7 @@ NU.slidewithmarker.priv.clas.ActionLayer = function(parentcontainer){
 
 /**
  *  @this {ActionLayer}
- *  @return {Element} the html element of the main container 
+ *  @return {Element} The html element of the main container.
  *  @private
  */
 
@@ -609,7 +609,7 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getBaseElement = function(){
 
 /**
  *  @this {ActionLayer}
- *  @return {Object} the data of marker to send chat server.
+ *  @return {Object} The data of marker to send chat server.
  *  @private
  */
 
@@ -625,8 +625,8 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getMarkerdata = function(){
 
 /**
  *  @this {ActionLayer}
- *  @return {Function} Action Listner for onmousedown for this layer
- *  @param {SlideWithMarker} slidewithmarker the parent element of this
+ *  @return {Function} Action listner for onmousedown for this layer.
+ *  @param {SlideWithMarker} slidewithmarker The parent element of this.
  *  @private
  */
 
@@ -643,8 +643,8 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseDown = functi
 
 /**
  *  @this {ActionLayer}
- *  @return {Function} Action Listner for onmouseup for this layer
- *  @param {SlideWithMarker} slidewithmarker the parent element of this
+ *  @return {Function} Action listner for onmouseup for this layer.
+ *  @param {SlideWithMarker} slidewithmarker The parent element of this.
  *  @private
  */
 
@@ -661,8 +661,8 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseUp = function
 
 /**
  *  @this {ActionLayer}
- *  @return {Function} Action Listner for onmousemove for this layer
- *  @param {SlideWithMarker} slidewithmarker the parent element of this
+ *  @return {Function} Action listner for onmousemove for this layer.
+ *  @param {SlideWithMarker} slidewithmarker The parent element of this.
  *  @private
  */
 
@@ -678,8 +678,8 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseMove = functi
 
 /**
  *  @this {ActionLayer}
- *  @return {Function} Action Listner for onmouseclick for this layer
- *  @param {SlideWithMarker} slidewithmarker the parent element of this
+ *  @return {Function} Action listner for onmouseclick for this layer.
+ *  @param {SlideWithMarker} slidewithmarker The parent element of this.
  *  @private
  */
 
@@ -696,8 +696,8 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseClick = funct
 
 /**
  *  @this {ActionLayer}
- *  @return {Function} Action Listner for onmousedblclick for this layer
- *  @param {SlideWithMarker} slidewithmarker the parent element of this
+ *  @return {Function} Action listner for onmousedblclick for this layer.
+ *  @param {SlideWithMarker} slidewithmarker The parent element of this.
  *  @private
  */
 
@@ -726,7 +726,7 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.setActive = function(isactive
 /**
  *  Set the size.
  *  @this {ActionLayer}
- *  @param {Array} size the pair of width and height
+ *  @param {Array} size The pair of width and height.
  *  @private
  */
 
@@ -753,7 +753,7 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.setToggleMode = function(togg
 /**
  *  Change the style of pointer.
  *  @this {ActionLayer}
- *  @param {Number} e the kind of events.
+ *  @param {Number} e The kind of events. 0:mouseup, 1:mousedown, -1:mouseclick.
  *  @private
  */
 

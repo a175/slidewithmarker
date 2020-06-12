@@ -6,16 +6,21 @@ NU.slidewithmarker={
 };
 
 
+
 NU.slidewithmarker.publ.cons.SVGNS="http://www.w3.org/2000/svg";
 NU.slidewithmarker.publ.cons.XLINKNS="http://www.w3.org/1999/xlink";
 
-NU.slidewithmarker.publ.cons.TESTSERVERURL = "ws://127.0.0.1:12345/";
-NU.slidewithmarker.publ.cons.TESTSLIDEURLBASE = "./test-data/image-";
+NU.slidewithmarker.publ.cons.TEST_SERVERURL = "ws://127.0.0.1:12345/";
+NU.slidewithmarker.publ.cons.TEST_SLIDEURLBASE = "./test-data/image-";
 
 NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 
 
-/** */
+/** 
+ *  Constructor of SlideWithMarker
+ *  @constructor
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
     var elm,base;
     base = document.createElement("div");
@@ -45,14 +50,31 @@ NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
 
 };
 
+
+/** 
+ *  @this {SlideWithMarker}
+ *  @return The html element of main container.
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getBaseElement = function(){
     return this.baseElement;
 };
+
+/** 
+ *  Set and load the url of a slide file.
+ *  @this {SlideWithMarker}
+ *  @todo Fix this function for PDF version.
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.loadSlideFile = function(url){
     this.slideLayer.loadSlideFile(url);
     this.fitMarkerLayerToSlideLayer();
 };
+
+/** 
+ *  Change the visibility of each layer.
+ *  @this {SlideWithMarker}
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setMode = function(mode){
     if(mode==3){
@@ -81,10 +103,19 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setMode = function(mode){
 };
 
 
+/** 
+ *  Set the mode of pointer of ActionLayer.
+ *  @this {SlideWithMarker}
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setPointerMode = function(mode){
     this.actionLayer.setToggleMode(mode);
 };
+
+/** 
+ *  Move to the first(-2), previous(-1), next(1) or final(2) page.
+ *  @this {SlideWithMarker}
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.movePage = function(mode){
     if(this.is_master_mode || !this.is_slave_mode){
@@ -107,6 +138,12 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.movePage = function(mode)
     this.fitMarkerLayerToSlideLayer();
 };
 
+/** 
+ *  Adjust the size of marker and action layers to slide layer.
+ *  @this {SlideWithMarker}
+ *  @private
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.fitMarkerLayerToSlideLayer = function(){
     var size;
     size=this.slideLayer.getPageSize();
@@ -115,6 +152,11 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.fitMarkerLayerToSlideLaye
 };
 
 
+/** 
+ *  @this {SlideWithMarker}
+ *  @return the data of markers and slides to send to chat server.
+ *  @private
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getPresentationData = function(){
     var presentationdata;
@@ -125,6 +167,11 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getPresentationData = fun
 };
 
 
+/** 
+ *  Apply  the data of markers and slides recieved from chat server.
+ *  @this {SlideWithMarker}
+ *  @private
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.applyPresentationData = function(data){
     var s,p,slidedata,scale;
@@ -147,6 +194,13 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.applyPresentationData = f
     }
 };
 
+/** 
+ *  Get and send the data of markers and slides to chat server. 
+ *  @this {SlideWithMarker}
+ *  @private
+ *  @todo fix the case when the connection is not ready. 
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = function(){
     var presentationdata;
     if(this.is_master_mode){
@@ -160,12 +214,25 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = fu
     }
 };
 
+/** 
+ *  @this {SlideWithMarker}
+ *  @return {function} Action Listener for onclose of websocket.
+ *  @private
+ *  @todo try to connect again?
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnClose = function(slidewithmarker){
     return function(event){
 	slidewithmarker.websocket=null;
 	slidewithmarker.is_ready_to_send=false;
     };
 };
+
+/** 
+ *  @this {SlideWithMarker}
+ *  @return {function} Action Listener for onmessage of websocket.
+ *  @private
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnMessage = function(slidewithmarker){
     return function(event){
@@ -174,6 +241,12 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnMessage = func
 	}
     };
 };
+
+/** 
+ *  @this {SlideWithMarker}
+ *  @return {function} Action Listener for onopen of websocket.
+ *  @private
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnConnectionOpen = function(slidewithmarker){
     return function(event){
@@ -184,12 +257,25 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnConnectionOpen
     };
 };
 
+/** 
+ *  @this {SlideWithMarker}
+ *  @return {function} Action Listener for onerror of websocket.
+ *  @private
+ *  @todo try to connect again?
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnError = function(slidewithmarker){
     return function(event){
 	slidewithmarker.is_ready_to_send = false;
 	slidewithmarker.websocket = null;
     };
 };
+
+/**
+ *  Open the websocet and set action linteners.
+ *  @this {SlideWithMarker}
+ *  @private
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.openConnection = function(){
     if(!this.websocket){
@@ -202,6 +288,12 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.openConnection = function
     }
 };
 
+/**
+ *  Close the websocet.
+ *  @this {SlideWithMarker}
+ *  @private
+ */
+
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = function(){
     if(this.websocket){
 	this.websocket.close();
@@ -209,6 +301,11 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = functio
 	this.websocket = null;
     }
 };
+
+/**
+ *  Set the URL of chat server.
+ *  @this {SlideWithMarker}
+ */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = function(url){
     if(this.websocket){
@@ -219,6 +316,12 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = functio
     this.chatserverurl = url;
 };
 
+
+/**
+ *  Layer of slide.
+ *  @constructor
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.SlideLayer = function(){
     var base;
@@ -232,9 +335,22 @@ NU.slidewithmarker.priv.clas.SlideLayer = function(){
     base.className = "slidelayer";
 };
 
+/**
+ *  @this {SlideLayer}
+ *  @return the html elment of the main container.
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.getBaseElement = function(){
     return this.baseElement;
 };
+
+/**
+ *  Set and load the url of slide file
+ *  @this {SlideLayer}
+ *  @private
+ *  @todo fix for the PDF version
+ */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.loadSlideFile = function(url){
     if (this.slideElement){
@@ -248,12 +364,25 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.loadSlideFile = function(url){
     this.setPage(0);
 };
 
+/**
+ *  Set and load the new page of slide file
+ *  @this {SlideLayer}
+ *  @private
+ *  @todo fix for the PDF version
+ */
+
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.setPage = function(page){
     var p;
     p = ((page + this.totalPages) % this.totalPages );
     this.current_page = p;
     this.slideElement.src=(this.slidefileurlbase+(p+1)+".png");
 };
+
+/**
+ *  Set the page relatively
+ *  @this {SlideLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.nextPage = function(page_rel){
     var p;
@@ -263,9 +392,22 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.nextPage = function(page_rel){
     }
 };
 
+/**
+ *  @this {SlideLayer}
+ *  @return the pair of width and height of current page of slide.
+ *  @private
+ *  @todo fix for the PDF version
+ */
+
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.getPageSize = function(){
     return [this.slideElement.clientWidth,this.slideElement.clientHeight];
 };
+
+/**
+ *  @this {SlideLayer}
+ *  @return the data of slide to send the chat server.
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.SlideLayer.prototype.getSlidedata = function(){
     var ps, cp, data;
@@ -276,6 +418,11 @@ NU.slidewithmarker.priv.clas.SlideLayer.prototype.getSlidedata = function(){
 };
 
 
+/**
+ *  Layer of Makers
+ *  @constructor
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     var base,elm;
@@ -320,9 +467,21 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
 
 };
 
+/**
+ *  @this {MarkerLayer}
+ *  @return the html elemnt of the main container.
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.MarkerLayer.prototype.getBaseElement = function(){
     return this.baseElement;
 };
+
+/**
+ *  Set visibility.
+ *  @this {MarkerLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setActive = function(isactive){
     if(isactive){
@@ -332,6 +491,12 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setActive = function(isactive
     }
 };
 
+/**
+ *  Set size.
+ *  @this {MarkerLayer}
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setSize = function(size){
     if(size){
 	this.baseElement.style.width = size[0];
@@ -339,6 +504,12 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setSize = function(size){
     }
 };
 
+
+/**
+ *  Set marker.
+ *  @this {MarkerLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarker = function(markerdata,scale){
     this.vruler.style.left = markerdata["pointer"]["p"][0]*scale;
@@ -353,6 +524,12 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarker = function(markerda
 };
 
 
+
+/**
+ *  Layer for action.
+ *  @constractor 
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer = function(parentcontainer){
     var base,action;
@@ -382,10 +559,22 @@ NU.slidewithmarker.priv.clas.ActionLayer = function(parentcontainer){
     this.baseElement.addEventListener("dblclick",action);
 };
 
+/**
+ *  @this {ActionLayer}
+ *  @return the html element of the main container 
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getBaseElement = function(){
     return this.baseElement;
 };
 
+
+/**
+ *  @this {ActionLayer}
+ *  @return the data of marker to send chat server.
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getMarkerdata = function(){
     var s, p, ps, cp, markerdata;
@@ -396,6 +585,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getMarkerdata = function(){
 };
 
 
+
+/**
+ *  @this {ActionLayer}
+ *  @return {function} Action Listner for onmousedown for this layer
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseDown = function(slidewithmarker){
     return function(event){
@@ -408,6 +603,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseDown = functi
     };
 };
 
+/**
+ *  @this {ActionLayer}
+ *  @return {function} Action Listner for onmouseup for this layer
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseUp = function(slidewithmarker){
     return function(event){
 	var x,y;
@@ -419,6 +620,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseUp = function
     };
 };
 
+/**
+ *  @this {ActionLayer}
+ *  @return {function} Action Listner for onmousemove for this layer
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseMove = function(slidewithmarker){
     return function(event){
 	var x,y;
@@ -428,6 +635,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseMove = functi
 	slidewithmarker.sendPresentationData();
     };
 };
+
+/**
+ *  @this {ActionLayer}
+ *  @return {function} Action Listner for onmouseclick for this layer
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseClick = function(slidewithmarker){
     return function(event){
@@ -440,12 +653,24 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseClick = funct
     };
 };
 
+/**
+ *  @this {ActionLayer}
+ *  @return {function} Action Listner for onmousedblclick for this layer
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.getActionOnMouseDblClick = function(slidewithmarker){
     return function(event){
 	slidewithmarker.slideLayer.nextPage(1);
 	slidewithmarker.sendPresentationData();
     };
 };
+
+/**
+ *  Change the visibility.
+ *  @this {ActionLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.setActive = function(isactive){
     if(isactive){
@@ -455,6 +680,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.setActive = function(isactive
     }
 };
 
+/**
+ *  Set the size.
+ *  @this {ActionLayer}
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.setSize = function(size){
     if(size){
 	this.baseElement.style.width = size[0];
@@ -463,10 +694,22 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.setSize = function(size){
 };
 
 
+/**
+ *  Set how to toggle pointer.
+ *  @this {ActionLayer}
+ *  @private
+ */
+
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.setToggleMode = function(togglemode){
     this.toggle_mode = togglemode;
     this.changePointerStyle(0);
 }
+
+/**
+ *  Change the style of pointer.
+ *  @this {ActionLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.changePointerStyle = function(e){
     if(this.toggle_mode == 1){
@@ -492,6 +735,12 @@ NU.slidewithmarker.priv.clas.ActionLayer.prototype.changePointerStyle = function
 	this.pointer_style="";
     }    
 };
+
+/**
+ *  Set pointer cordinate to send to chat server.
+ *  @this {ActionLayer}
+ *  @private
+ */
 
 NU.slidewithmarker.priv.clas.ActionLayer.prototype.changePointerCoordinate = function(x,y){
     this.pointer_coordinate = [x,y];

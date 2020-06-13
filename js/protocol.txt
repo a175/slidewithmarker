@@ -1,0 +1,52 @@
+Note of temporary protocol for test_server.py and slidewithmarker.js:
+
+Clients connect to a test server by websocket.
+All messages are sent as JSON texts.
+
+1.
+
+On open connection, a client sends the following message to a server:
+ {"request": {"slide": ""}}
+
+The purpose of this message is to identify the target slide.
+But this has not been implented.
+
+
+If the server recieves the message with the key "request", then
+the server sends the message to the client.
+The message contains the current status of markers and the slide.
+The format is the same as in 2.
+
+
+2.
+
+If the status of markers and the slide is changed, then
+the client of presenter sends the following message to the server:
+ {
+ "marker":{"pointer": {"p":[ .. , .. ], "s": .. } }
+ "slide": {"page": .. , "size": [ .. , .. ]} 
+ }
+
+The values of the message are as follows:
+ * "marker" -> "pointer" -> "p"  is the position of pointer.
+ * "marker" -> "pointer" -> "s"  is the style of pointer.
+ * "slide" -> "page" is the current page.
+ * "slide" -> "size" is the size of the current page.
+All of them sould be sent even if some of them are not changed.
+
+
+If the server recieves the message, then
+the server send the recieved message to all clients except the original sender.
+Just echo.
+
+
+If a client recieves the message from server, then
+the client apply the current status of markers and the slide to the view as follows:
+ * "slide" -> "page" should be applied.
+ * "marker" -> "pointer" -> "s" should be applied.
+ * "slide" -> "size" should NOT be applied.
+ * "marker" -> "pointer" -> "p"  shoud be applied.
+   Note that the size of slide of the client
+   might be different from one of the original sender.
+
+

@@ -18,6 +18,8 @@ NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 
 /** 
  *  Constructor of SlideWithMarker.
+ *  This class implements the main container and frontends of slide with marker.
+ *  
  *  @constructor
  *  @this {SlideWithMarker}
  */
@@ -57,7 +59,8 @@ NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
 };
 
 
-/** 
+/**
+ *  This mehod retuens the main container of this class to add to DOM.
  *  @this {SlideWithMarker}
  *  @return {Element} The html element of main container.
  */
@@ -462,10 +465,7 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
     
     elm = document.createElement("div");
     elm.style.position = "absolute";
-    elm.style.left = 0;
-    elm.style.top = 0;    
     elm.style.width = "100%";
-    elm.style.height = "5px";
     elm.className = "hruler";
     base.appendChild(elm);
     /** @type {Element} Horizonal ruler.*/
@@ -473,9 +473,6 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
 
     elm = document.createElement("div");
     elm.style.position = "absolute";
-    elm.style.left = 0;
-    elm.style.top = 0;    
-    elm.style.width = "5px";
     elm.style.height = "100%";
     elm.className = "vruler";
     base.appendChild(elm);
@@ -484,15 +481,13 @@ NU.slidewithmarker.priv.clas.MarkerLayer = function(){
 
     elm = document.createElement("div");
     elm.style.position = "absolute";
-    elm.style.left = 0;
-    elm.style.top = 0;    
-    elm.style.width = "7px";
-    elm.style.height = "7px";
     elm.className = "pointer";
     base.appendChild(elm);
     /** @type {Element} Pointer.*/
     this.pointer = elm;
 
+    this.setMarkerPosition(0,0);
+    this.setMarkerSize("1ex");
 };
 
 /**
@@ -544,17 +539,57 @@ NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setSize = function(size){
  */
 
 NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarker = function(markerdata,scale){
-    this.vruler.style.left = markerdata["pointer"]["p"][0]*scale;
-    this.hruler.style.top = markerdata["pointer"]["p"][1]*scale;
-    this.pointer.style.left = markerdata["pointer"]["p"][0]*scale;
-    this.pointer.style.top = markerdata["pointer"]["p"][1]*scale;
-    if(markerdata["pointer"]["s"]=="o"){
-	this.pointer.style.visibility = "visible";
-    }else{
-	this.pointer.style.visibility = "hidden";
+    var pointer, position, style, width, x, y;
+    pointer = markerdata["pointer"];
+    if(pointer){
+	position = pointer["p"];
+	if(position){
+	    x = position[0]*scale;
+	    y = position[1]*scale;
+	    this.setMarkerPosition(x,y);
+	}
+	width = pointer["w"];
+	if(width){
+	    width = width*scale;
+	    this.setMarkerSize(width);
+	}
+	style = pointer["s"];
+	if(style=="o"){
+	    this.pointer.style.visibility = "visible";
+	}else{
+	    this.pointer.style.visibility = "hidden";
+	}
     }
 };
 
+/**
+ *  Set the size of marker.
+ *  @this {MarkerLayer}
+ *  @param width The size of marker as Number or CSS string.
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarkerSize = function(width){
+    this.vruler.style.width = width;
+    this.hruler.style.height = width;
+    this.pointer.style.width = width;
+    this.pointer.style.height = width;
+};
+
+/**
+ *  Set the position of marker.
+ *  @this {MarkerLayer}
+ *  @param {Number} x
+ *  @param {Number} y
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.MarkerLayer.prototype.setMarkerPosition = function(x,y){
+    this.vruler.style.left = x; 
+    this.hruler.style.top = y;
+    this.pointer.style.left = x;
+    this.pointer.style.top = y;
+};
 
 
 /**

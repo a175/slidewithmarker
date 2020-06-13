@@ -1,12 +1,11 @@
 div.vruler {
     opacity: 0.1;
-    background-color: red;
+    background-color: red;    
 }
 
 div.hruler {
     opacity: 0.1;
     background-color: red;
-
 }
 
 div.pointer {

@@ -21,6 +21,7 @@ NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 /** 
  *  Constructor of SlideWithMarker.
  *  This class implements the main container and frontends of slide with marker.
+ *  This class also implements mehods to connect server.
  *  
  *  @constructor
  *  @this {SlideWithMarker}
@@ -349,8 +350,6 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = functio
     this.is_ready_to_send = false;
     this.chatserverurl = url;
 };
-
-
 
 
 /**

@@ -20,8 +20,7 @@ NU.slidewithmarker.publ.func.createAndPut = function(pare){};
 
 /** 
  *  Constructor of SlideWithMarker.
- *  This class implements the main container and frontends of slide with marker.
- *  This class also implements mehods to connect server.
+ *  This class implements the main container and frontends of functions of slide with marker.
  *  
  *  @constructor
  *  @this {SlideWithMarker}
@@ -56,6 +55,9 @@ NU.slidewithmarker.publ.clas.SlideWithMarker = function(){
     elm.style.zIndex = "5";
     base.appendChild(elm);
 
+
+    /** @type {Connection}*/
+    this.connection = new NU.slidewithmarker.priv.clas.Connection(this);
 };
 
 
@@ -221,7 +223,6 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.applyPresentationData = f
  *  Get and send the data of markers and slides to chat server. 
  *  @this {SlideWithMarker}
  *  @private
- *  @todo Fix the case when the connection is not ready. 
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = function(){
@@ -229,78 +230,11 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.sendPresentationData = fu
     if(this.is_master_mode){
 	presentationdata = this.getPresentationData();
 	this.applyPresentationData(presentationdata);
-	if(this.is_ready_to_send){
-	    this.websocket.send(JSON.stringify(presentationdata));
-	}else{
-	    console.log("Not send");
-	}
+	this.connection.send(presentationdata);
     }
 };
 
 
-/** 
- *  @this {SlideWithMarker}
- *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action listener for onclose of websocket.
- *  @private
- *  @todo Try to connect again?
- */
-
-NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnClose = function(slidewithmarker){
-    return function(event){
-	slidewithmarker.websocket=null;
-	slidewithmarker.is_ready_to_send=false;
-    };
-};
-
-
-/** 
- *  @this {SlideWithMarker}
- *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action listener for onmessage of websocket.
- *  @private
- */
-
-NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnMessage = function(slidewithmarker){
-    return function(event){
-	if(slidewithmarker.is_slave_mode){
-	    slidewithmarker.applyPresentationData(JSON.parse(event.data));
-	}
-    };
-};
-
-
-/** 
- *  @this {SlideWithMarker}
- *  @param {SlideWithMarker} slidewithmarker
- *  @return {Function} Action listener for onopen of websocket.
- *  @private
- */
-
-NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnConnectionOpen = function(slidewithmarker){
-    return function(event){
-	var requestdata;
-	requestdata = {"request":{"slide":""}}
-	slidewithmarker.websocket.send(JSON.stringify(requestdata));
-	slidewithmarker.is_ready_to_send=true;
-    };
-};
-
-
-/** 
- *  @this {SlideWithMarker}
- *  @param {SlideWithMarker} slidewithmarker
- *  @return {function} Action listener for onerror of websocket.
- *  @private
- *  @todo Try to connect again?
- */
-
-NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnError = function(slidewithmarker){
-    return function(event){
-	slidewithmarker.is_ready_to_send = false;
-	slidewithmarker.websocket = null;
-    };
-};
 
 
 /**
@@ -310,15 +244,9 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.getActionOnError = functi
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.openConnection = function(){
-    if(!this.websocket){
-	this.is_ready_to_send = false;
-	this.websocket = new WebSocket(this.chatserverurl);
-	this.websocket.onopen = this.getActionOnConnectionOpen(this);
-	this.websocket.onmessage = this.getActionOnMessage(this);
-	this.websocket.onerror = this.getActionOnError(this);
-	this.websocket.onclose = this.getActionOnClose(this);
-    }
+    this.connection.open();
 };
+
 
 
 /**
@@ -328,12 +256,9 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.openConnection = function
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = function(){
-    if(this.websocket){
-	this.websocket.close();
-	this.is_ready_to_send = false;
-	this.websocket = null;
-    }
+    this.connection.close();
 };
+
 
 
 /**
@@ -343,12 +268,193 @@ NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.closeConnection = functio
  */
 
 NU.slidewithmarker.publ.clas.SlideWithMarker.prototype.setChatSeverURL = function(url){
+    this.connection.setURL(url);
+};
+
+
+/**
+ *  Class to implement connection by websocket.
+ *  @constructor
+ *  @this {Connection}
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.Connection = function(slidewithmarker){
+    this.is_ready_to_send=false;
+    this.websocket = null;
+    this.url = null;
+    this.slidewithmarker = slidewithmarker;
+};
+
+
+/**
+ *  Translate String to presentationdata
+ *  @this {Connection}
+ *  @private
+ *  @return {Object} presentationdata to apply slidewithmarker
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.translateToPresentationdata = function(data){
+    return JSON.parse(data);
+}
+
+
+
+
+/**
+ *  Translate Presentation data to data for server.
+ *  @this {Connection}
+ *  @private
+ *  @return {String} data to send to server
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.translateToStringData = function(data){
+    return JSON.stringify(data);
+
+}
+
+
+/**
+ *  Get data to send server at first.
+ *  @this {Connection}
+ *  @private
+ *  @return {String} data to send to server
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.getFirstRequest = function(){
+    var requestdata;
+    requestdata = {"request":{"slide":""}};
+    return JSON.stringify(requestdata);
+}
+
+
+
+/**
+ *  Set the URL of chat server.
+ *  @this {Connection}
+ *  @param {String} url The url of chat server.
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.setURL = function(url){
     if(this.websocket){
 	this.websocket.close();
     }
     this.websocket = null;
     this.is_ready_to_send = false;
-    this.chatserverurl = url;
+    this.url = url;
+};
+
+
+
+/**
+ *  Open the websocet and set action linteners.
+ *  @this {Connection}
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.open = function(){
+    if(!this.websocket){
+	this.is_ready_to_send = false;
+	this.websocket = new WebSocket(this.url);
+	this.websocket.onopen = this.getActionOnConnectionOpen(this);
+	this.websocket.onmessage = this.getActionOnMessage(this.slidewithmarker,this);
+	this.websocket.onerror = this.getActionOnError(this);
+	this.websocket.onclose = this.getActionOnClose(this);
+    }
+};
+
+/**
+ *  Close the websocet.
+ *  @this {Connection}
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.close = function(){
+    if(this.websocket){
+	this.websocket.close();
+	this.is_ready_to_send = false;
+	this.websocket = null;
+    }
+};
+
+
+/**
+ *  Send message to the server if possible.
+ *  @this {Connection}
+ *  @private
+ *  @todo Fix the case when the connection is not ready. 
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.send = function(data){
+	if(this.is_ready_to_send){
+	    this.websocket.send(this.translateToStringData(data));
+	}else{
+	    console.log("Not send");
+	}
+}
+
+
+/** 
+ *  @this {Connection}
+ *  @param {Connection} connection
+ *  @return {Function} Action listener for onclose of websocket.
+ *  @private
+ *  @todo Try to connect again?
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.getActionOnClose = function(connection){
+    return function(event){
+	connection.websocket=null;
+	connection.is_ready_to_send=false;
+    };
+};
+
+
+/** 
+ *  @this {Connection}
+ *  @param {SlideWithMarker} slidewithmarker
+ *  @return {Function} Action listener for onmessage of websocket.
+ *  @private
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.getActionOnMessage = function(slidewithmarker,connection){
+    return function(event){
+	var presentationdata;
+	if(slidewithmarker.is_slave_mode){
+	    presentationdata = connection.translateToPresentationdata(event.data);
+	    slidewithmarker.applyPresentationData(presentationdata);
+	}
+    };
+};
+
+
+/** 
+ *  @this {Connection}
+ *  @param {Connection} connection
+ *  @return {Function} Action listener for onopen of websocket.
+ *  @private
+ */
+NU.slidewithmarker.priv.clas.Connection.prototype.getActionOnConnectionOpen = function(connection){
+    return function(event){
+	connection.websocket.send(connection.getFirstRequest());
+	connection.is_ready_to_send=true;
+    };
+};
+
+
+/** 
+ *  @this {Connection}
+ *  @param {Connection} connection
+ *  @return {Function} Action listener for onerror of websocket.
+ *  @private
+ *  @todo Try to connect again?
+ */
+
+NU.slidewithmarker.priv.clas.Connection.prototype.getActionOnError = function(connection){
+    return function(event){
+	connection.is_ready_to_send = false;
+	connection.websocket = null;
+    };
 };
 
 
